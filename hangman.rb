@@ -81,17 +81,17 @@ class Hangman
   end
 
   def player_won?
-  	unless @display_content.include?("_")
+    unless @display_content.include?("_")
       puts "You found the correct word!"
       true
     end
   end
 
   def print_toon(increment)
-  	@failed_attemps += increment
+    @failed_attemps += increment
 
-  	case @failed_attemps
-  	when 0
+    case @failed_attemps
+    when 0
       puts "  ______"
       puts "        |"
       puts "        |"
