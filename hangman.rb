@@ -35,11 +35,11 @@ class Hangman
   end
 
   def load_state
-  	save_file = File.read("saved_state.json")
-  	json_hash = JSON.parse(save_file)
-  	@secret_word = json_hash["secret_word"]
-  	@display_content = json_hash["display_content"]
-  	@failed_attemps = json_hash["failed_attemps"]
+    save_file = File.read("saved_state.json")
+    json_hash = JSON.parse(save_file)
+    @secret_word = json_hash["secret_word"]
+    @display_content = json_hash["display_content"]
+    @failed_attemps = json_hash["failed_attemps"]
   end
   
   def start_game
