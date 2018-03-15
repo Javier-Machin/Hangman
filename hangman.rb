@@ -1,30 +1,62 @@
+require "json"
 class Hangman
 
   def initialize
-    @player = "potato"
     @secret_word = select_word
     @display_content = "_" * @secret_word.length
     @failed_attemps = 0
   end
 
   def main_menu
-  	#load or new game?
+    option = "3"
+    until option == "1" || option == "2"
+      puts "(1) New game"
+      puts "(2) Load game"
+      print "Play new game or load the saved game? "
+      option = gets.chomp[0]
+      if option == "2" 
+        if File.exist?("saved_state.json")
+          load_state
+        else
+          puts "There is no saved game, save one first"
+          option = "3"
+        end
+      end
+    end
+    start_game
+  end
+
+  def save_state
+    json_object = { :secret_word => @secret_word, :display_content => @display_content,
+    	            :failed_attemps => @failed_attemps }.to_json
+    File.open("saved_state.json", "w") { |file| file.write(json_object) }
+  end
+
+  def load_state
+  	save_file = File.read("saved_state.json")
+  	json_hash = JSON.parse(save_file)
+  	@secret_word = json_hash["secret_word"]
+  	@display_content = json_hash["display_content"]
+  	@failed_attemps = json_hash["failed_attemps"]
   end
   
   def start_game
   	player_won = false
   	while @failed_attemps != 10 
-  	  puts "#{10 - @failed_attemps} turns left" 
+  	  puts @display_content
+  	  puts "#{10 - @failed_attemps.to_i} turns left" 
       print "Enter a letter or attempt the full word: "
       letters = gets.chomp
-      #save_state if letters == "save"
+      if letters == "save"
+      	save_state
+      	next
+      end
       break if letters == "exit"
       update_display(letters) if letters
-      puts @display_content
       player_won = player_won?
       break if player_won
     end
-    puts "Game over, the secret word was: #{@secret_word}" if !player_won
+    puts "Game over, the secret word was: #{@secret_word}" if @failed_attemps == 10
   end
 
   private
@@ -46,14 +78,6 @@ class Hangman
     end
 
     current_state == @display_content ? print_toon(1) : print_toon(0)
-  end
-
-  def save_state
-    #hurr durr to json
-  end
-  
-  def load_state
-  	#json to hurr durr
   end
 
   def player_won?
@@ -140,4 +164,4 @@ class Hangman
 end
 
 my_game = Hangman.new
-my_game.start_game
+my_game.main_menu
