@@ -26,6 +26,8 @@ class Hangman
     start_game
   end
 
+  private
+
   def save_state
     json_object = { :secret_word => @secret_word, :display_content => @display_content,
     	            :failed_attemps => @failed_attemps }.to_json
@@ -58,8 +60,6 @@ class Hangman
     end
     puts "Game over, the secret word was: #{@secret_word}" if @failed_attemps == 10
   end
-
-  private
 
   def select_word
     words = File.readlines("5desk.txt").select { |word| word.length.between?(5, 12) }
