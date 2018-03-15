@@ -43,15 +43,15 @@ class Hangman
   end
   
   def start_game
-  	player_won = false
-  	while @failed_attemps != 10 
-  	  puts @display_content
-  	  puts "#{10 - @failed_attemps.to_i} turns left" 
+    player_won = false
+    while @failed_attemps != 10 
+      puts @display_content
+      puts "#{10 - @failed_attemps.to_i} turns left" 
       print "Enter a letter or attempt the full word: "
       letters = gets.chomp
       if letters == "save"
-      	save_state
-      	next
+        save_state
+        next
       end
       break if letters == "exit"
       update_display(letters) if letters
