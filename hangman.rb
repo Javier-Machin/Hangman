@@ -7,6 +7,7 @@ class Hangman
     @failed_attemps = 0
   end
 
+  # Displays the menu
   def main_menu
     option = "3"
     until option == "1" || option == "2"
@@ -27,13 +28,15 @@ class Hangman
   end
 
   private
-
+  
+  #Saves the current state
   def save_state
     json_object = { :secret_word => @secret_word, :display_content => @display_content,
     	            :failed_attemps => @failed_attemps }.to_json
     File.open("saved_state.json", "w") { |file| file.write(json_object) }
   end
 
+  #Loads state from saved_state.json
   def load_state
     save_file = File.read("saved_state.json")
     json_hash = JSON.parse(save_file)
@@ -61,11 +64,13 @@ class Hangman
     puts "Game over, the secret word was: #{@secret_word}" if @failed_attemps == 10
   end
 
+  #Takes a word from the dictionary file
   def select_word
     words = File.readlines("5desk.txt").select { |word| word.length.between?(5, 12) }
     words[rand(words.length)].strip
   end
 
+  #Refresh display
   def update_display(letters)
     letters.downcase!
     current_state = "#{@display_content}"
@@ -80,6 +85,7 @@ class Hangman
     current_state == @display_content ? print_toon(1) : print_toon(0)
   end
 
+  #Checks if the player won.
   def player_won?
     unless @display_content.include?("_")
       puts "You found the correct word!"
